@@ -1,4 +1,4 @@
-package com.example.rabbitmq.consumer.two;
+package com.example.rabbitmq.two;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
