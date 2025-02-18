@@ -1,0 +1,11 @@
+So far we have learned how to work with RabbitMQ and Spring Boot and send messages via RabbitTemplate.
+Now we want to implement a better mechanism for sending and receiving messages, namely using JSON as the message format.
+This is called implementing a JSON Message Converter, which eliminates the need to manually convert messages.
+We send a message (DummyMessage) from the Producer.
+This message is stored in JSON format (without manually converting it).
+In the Consumer, the message is received and processed without any problems.
+Here we have manually converted the message to JSON! But we want this to be done automatically.
+(String jsonMessage = objectMapper.writeValueAsString(myMessage);)
+🔹 How do we solve this problem?
+Using Jackson2JsonMessageConverter, which automatically converts our messages between JSON and Java Object.
+
