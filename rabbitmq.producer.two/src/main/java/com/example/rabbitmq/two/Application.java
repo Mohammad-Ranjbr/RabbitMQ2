@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.concurrent.TimeUnit;
+
 @SpringBootApplication
 @RequiredArgsConstructor
 public class Application implements CommandLineRunner {
@@ -19,8 +21,16 @@ public class Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		DummyMessage dummyMessage = new DummyMessage("Content", 1);
-		dummyProducer.sendMessage(dummyMessage);
+//		DummyMessage dummyMessage = new DummyMessage("Content", 1);
+//		dummyProducer.sendMessage(dummyMessage);
+
+		// The number 10_000 is the same as ten thousand (10,000), but written with an underscore (_).
+		// The underscore (_) has no effect on the value of the number and is only used for readability.
+		for(int i=0 ; i<10_000 ; i++){
+			DummyMessage dummyMessage = new DummyMessage("Content " + i, 1);
+			dummyProducer.sendMessage(dummyMessage);
+			TimeUnit.SECONDS.sleep(1);
+		}
 	}
 
 }

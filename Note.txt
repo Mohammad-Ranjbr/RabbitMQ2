@@ -9,3 +9,4 @@ Here we have manually converted the message to JSON! But we want this to be done
 🔹 How do we solve this problem?
 Using Jackson2JsonMessageConverter, which automatically converts our messages between JSON and Java Object.
 
+
