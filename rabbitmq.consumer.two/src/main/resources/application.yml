@@ -1,0 +1,9 @@
+spring:
+  application.name: rabbitmq.consumer.two
+  rabbitmq:
+    addresses: localhost:5672
+    username: admin
+    password: admin123
+    listener:
+      simple:
+        prefetch: 1

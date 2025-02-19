@@ -26,11 +26,17 @@ public class Application implements CommandLineRunner {
 
 		// The number 10_000 is the same as ten thousand (10,000), but written with an underscore (_).
 		// The underscore (_) has no effect on the value of the number and is only used for readability.
-		for(int i=0 ; i<10_000 ; i++){
+//		for(int i=0 ; i<10_000 ; i++){
+//			DummyMessage dummyMessage = new DummyMessage("Content " + i, 1);
+//			dummyProducer.sendMessage(dummyMessage);
+//			TimeUnit.SECONDS.sleep(1);
+//		}
+
+		for(int i=0 ; i<500 ; i++){
 			DummyMessage dummyMessage = new DummyMessage("Content " + i, 1);
 			dummyProducer.sendMessage(dummyMessage);
-			TimeUnit.SECONDS.sleep(1);
 		}
+
 	}
 
 }

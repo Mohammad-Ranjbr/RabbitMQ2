@@ -9,4 +9,14 @@ Here we have manually converted the message to JSON! But we want this to be done
 🔹 How do we solve this problem?
 Using Jackson2JsonMessageConverter, which automatically converts our messages between JSON and Java Object.
 
+Prefetch Count allows you to control how many messages are sent to a consumer at a time.
+Suppose you set the prefetch count to 250. Now, when a consumer connects to RabbitMQ and requests messages to process, 250 messages are sent to the consumer at a time.
+If the number of messages is large and the consumer processing is slow, some consumers may become idle because they have no messages to process, even if other consumers are processing.
+For example, if you have 500 messages in the queue and you have 2 consumers each receiving 250 messages, but the consumers are processing very slowly (say 20 seconds per message), the other consumers may not receive any messages and become idle.
+Scenario 1:
+When we set the prefetch value to 250, all 500 messages are sent to two consumers. But since consumers are slow, all messages are sent to consumers 1 and 2 and consumer 3 does not receive any messages.
+Scenario 2:
+Now that we have changed the prefetch count to 1, consumers receive messages one by one. Therefore, more consumers are active simultaneously and all messages are distributed equally among consumers.
+In case of slow processing, a low prefetch count (e.g. 1) can be useful so that messages are sent one by one and all consumers are active.
+For faster processing, we can choose a higher prefetch count (e.g. 250) so that messages are sent to consumers quickly.
 
