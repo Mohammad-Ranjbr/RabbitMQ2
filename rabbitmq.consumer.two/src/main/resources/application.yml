@@ -4,6 +4,6 @@ spring:
     addresses: localhost:5672
     username: admin
     password: admin123
-    listener:
-      simple:
-        prefetch: 1
+#    listener:
+#      simple:
+#        prefetch: 1

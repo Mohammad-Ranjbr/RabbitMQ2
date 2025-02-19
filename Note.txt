@@ -20,3 +20,15 @@ Now that we have changed the prefetch count to 1, consumers receive messages one
 In case of slow processing, a low prefetch count (e.g. 1) can be useful so that messages are sent one by one and all consumers are active.
 For faster processing, we can choose a higher prefetch count (e.g. 250) so that messages are sent to consumers quickly.
 
+Default prefetch value:
+In Spring, the default value for prefetch is 250. This means that each consumer can hold up to 250 unacknowledged messages in memory. This value is not set by default in the application.yaml configuration.
+
+Effect of setting the prefetch value:
+If we change the prefetch value to 1, this means that each consumer can only hold one unacknowledged message in memory.
+In this case, when the producer sends 500 messages to the queue and then stops, these messages are distributed evenly among all consumers and each consumer receives the messages one by one.
+
+Why is prefetch important?:
+If the processing time in consumers is long, a low prefetch value (such as 1) helps to distribute the messages evenly among all consumers and no consumer is left without work. Whereas if the prefetch value is high (e.g. 250), some consumers may be busy processing messages while others remain idle.
+
+
+

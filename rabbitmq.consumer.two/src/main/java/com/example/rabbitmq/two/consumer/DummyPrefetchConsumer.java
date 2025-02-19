@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
-@Service
+//@Service
 public class DummyPrefetchConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(DummyPrefetchConsumer.class);

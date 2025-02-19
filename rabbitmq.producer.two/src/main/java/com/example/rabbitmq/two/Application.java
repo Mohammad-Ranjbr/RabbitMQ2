@@ -2,6 +2,7 @@ package com.example.rabbitmq.two;
 
 import com.example.rabbitmq.two.model.DummyMessage;
 import com.example.rabbitmq.two.producer.DummyProducer;
+import com.example.rabbitmq.two.producer.MultiplePrefetchProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,7 @@ public class Application implements CommandLineRunner {
 	}
 
 	private final DummyProducer dummyProducer;
+	private final MultiplePrefetchProducer multiplePrefetchProducer;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -32,10 +34,13 @@ public class Application implements CommandLineRunner {
 //			TimeUnit.SECONDS.sleep(1);
 //		}
 
-		for(int i=0 ; i<500 ; i++){
-			DummyMessage dummyMessage = new DummyMessage("Content " + i, 1);
-			dummyProducer.sendMessage(dummyMessage);
-		}
+//		for(int i=0 ; i<500 ; i++){
+//			DummyMessage dummyMessage = new DummyMessage("Content " + i, 1);
+//			dummyProducer.sendMessage(dummyMessage);
+//		}
+
+		multiplePrefetchProducer.simulateTransaction();
+		multiplePrefetchProducer.simulateScheduler();
 
 	}
 
