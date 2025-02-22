@@ -12,7 +12,7 @@ Using Jackson2JsonMessageConverter, which automatically converts our messages be
 Prefetch Count allows you to control how many messages are sent to a consumer at a time.
 Suppose you set the prefetch count to 250. Now, when a consumer connects to RabbitMQ and requests messages to process, 250 messages are sent to the consumer at a time.
 If the number of messages is large and the consumer processing is slow, some consumers may become idle because they have no messages to process, even if other consumers are processing.
-For example, if you have 500 messages in the queue and you have 2 consumers each receiving 250 messages, but the consumers are processing very slowly (say 20 seconds per message), the other consumers may not receive any messages and become idle.
+For example, if you have 500 messages in the queue, and you have 2 consumers each receiving 250 messages, but the consumers are processing very slowly (say 20 seconds per message), the other consumers may not receive any messages and become idle.
 Scenario 1:
 When we set the prefetch value to 250, all 500 messages are sent to two consumers. But since consumers are slow, all messages are sent to consumers 1 and 2 and consumer 3 does not receive any messages.
 Scenario 2:
@@ -30,5 +30,80 @@ In this case, when the producer sends 500 messages to the queue and then stops, 
 Why is prefetch important?:
 If the processing time in consumers is long, a low prefetch value (such as 1) helps to distribute the messages evenly among all consumers and no consumer is left without work. Whereas if the prefetch value is high (e.g. 250), some consumers may be busy processing messages while others remain idle.
 
+🔹 When a single consumer listens to a single queue, the processing order is absolutely guaranteed.
+✅ Messages are processed in the same order they arrived at the queue.
+For example:
+📩 Messages: A → B → C → D → E
+🔄 Processing order: A → B → C → D → E (exactly the same order)
 
+If we have multiple consumers
+🔹 When multiple consumers are on the same queue, the processing order is no longer guaranteed!
+🔹 RabbitMQ divides messages between consumers based on the prefetch value.
+✅ Example: Let's say we have 10 messages and 2 consumers, each with prefetch = 50.
+✅ Messages are divided like this:
+Messages 1, 3, 5, 7, 9 → to the first consumer
+Messages 2, 4, 6, 8, 10 → to the second consumer
+💡 But if one of the consumers is slower, its messages are processed later.
+For example:
+Consumer 1: Processes each message for 1 second.
+Consumer 2: Processes each message for 3 seconds.
+❌ Result: The processing order is messed up!
+📩 Received messages: 1, 2, 3, 5, 4, 6, 7, 8, 9, 10
+🚨 Problem: Message 5 was processed before message 4! So the order is not respected.
 
+Why is the order of message processing important?
+🔹 Suppose we have an Invoice system and three types of messages are sent to a queue:
+Invoice Created
+Invoice Updated
+Invoice Paid
+🛑 If multiple consumers process these messages at the same time, the order may get messed up:
+❌ For example, the message "Paid" is processed first and then "Updated"!
+✅ In this case, the invoice status may be displayed incorrectly.
+
+How to have multiple consumers but maintain the processing order?
+✅ There is no standard RabbitMQ solution for this problem.
+✅ But there are two general ways to handle this issue:
+
+Method 1: One queue for each message type
+🔹 Instead of putting all messages in one queue, create a separate queue for each message type.
+✅ queue.invoice.created
+✅ queue.invoice.updated
+✅ queue.invoice.paid
+🚀 This method keeps important messages like Invoice Paid in a separate queue and their order is not disturbed.
+
+Method 2: Using "Message Grouping"
+🔹 In some messaging systems like Kafka, we have a concept called Message Key that sends all messages related to a specific group to a specific consumer.
+🔹 In RabbitMQ, this is not possible by default, but you can always send related messages to a specific consumer using Consistent Hash Exchange.
+
+How to handle multiple message types in RabbitMQ?
+In RabbitMQ, there are two general methods for handling messages of different types:
+
+Method 1: One Queue per Message Type
+🔹 In this method, we have a separate queue for each message type.
+🔹 Each queue receives only one type of message with a specific routing key.
+✅ Example:
+Suppose we have two message types:
+Invoice Paid
+Invoice Created
+In this method, we will have two separate queues:
+📌 queue.invoice.paid (receives only paid messages)
+📌 queue.invoice.created (receives only created messages)
+🚀 Advantages:
+✅ Simpler code for the consumer (since each queue has only one message type).
+✅ It is possible to manage the processing of each message type separately.
+❌ Disadvantages:
+🔸 The number of queues increases, and we have to manage all of them.
+
+Method 2: One Queue for Multiple Message Types
+🔹 In this method, we have one queue that receives multiple message types.
+🔹 Messages are identified using a header or a variable in the payload to indicate what type they are.
+✅ Example:
+We put the same previous messages (Invoice Paid and Invoice Created) in a common queue:
+📌 queue.invoice (receives both paid and created messages)
+🔹 In this method, we identify the message type through the message header.
+🔹 In Spring, this value is automatically placed in the Type ID.
+🚀 Advantages:
+✅ The number of queues is less, so RabbitMQ management becomes easier.
+❌ Disadvantages:
+🔸 Consumers need to check what type the message is, which makes coding a bit more complicated.
+🔸 In languages other than Java/Spring, message type conversion may be harder.
