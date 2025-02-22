@@ -1,6 +1,7 @@
 package com.example.rabbitmq.two;
 
 import com.example.rabbitmq.two.model.DummyMessage;
+import com.example.rabbitmq.two.model.InvoiceCancelledMessage;
 import com.example.rabbitmq.two.model.InvoiceCreatedMessage;
 import com.example.rabbitmq.two.model.InvoicePaidMessage;
 import com.example.rabbitmq.two.producer.DummyProducer;
@@ -56,6 +57,10 @@ public class Application implements CommandLineRunner {
 		String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
 		InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
 		invoiceProducer.sendInvoicePaid(invoicePaidMessage);
+
+		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
+		InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
+		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 
 	}
 
