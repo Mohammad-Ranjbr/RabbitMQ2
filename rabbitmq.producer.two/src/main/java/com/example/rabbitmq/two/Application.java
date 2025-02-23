@@ -7,6 +7,7 @@ import com.example.rabbitmq.two.model.InvoicePaidMessage;
 import com.example.rabbitmq.two.producer.DummyProducer;
 import com.example.rabbitmq.two.producer.InvoiceProducer;
 import com.example.rabbitmq.two.producer.MultiplePrefetchProducer;
+import com.example.rabbitmq.two.producer.SingleActiveProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +28,7 @@ public class Application implements CommandLineRunner {
 	private final DummyProducer dummyProducer;
 	private final MultiplePrefetchProducer multiplePrefetchProducer;
 	private final InvoiceProducer invoiceProducer;
+	private final SingleActiveProducer singleActiveProducer;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -62,11 +64,13 @@ public class Application implements CommandLineRunner {
 //		InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
 //		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 
-		for(int i=0 ; i<200 ; i++){
-			String invoiceNumber = "INV-" + (i % 60);
-			InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(ThreadLocalRandom.current().nextInt(1, 200), LocalDate.now(), "USD", invoiceNumber);
-			invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
-		}
+//		for(int i=0 ; i<200 ; i++){
+//			String invoiceNumber = "INV-" + (i % 60);
+//			InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(ThreadLocalRandom.current().nextInt(1, 200), LocalDate.now(), "USD", invoiceNumber);
+//			invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+//		}
+
+		singleActiveProducer.sendDummy();
 
 	}
 
