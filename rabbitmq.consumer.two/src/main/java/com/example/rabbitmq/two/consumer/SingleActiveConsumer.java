@@ -11,6 +11,17 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SingleActiveConsumer {
 
+    // What is the general idea?
+    // All messages with a given routing key always go to a specific queue.
+    // Only one active consumer consumes from this queue.
+    // If the first consumer fails, the second consumer automatically takes over.
+    // Implementation Steps
+    // Creating an Exchange and Queue
+    // Create an Exchange named x.single.
+    // Create a Queue named q.single.
+    // When creating the queue, enable the Single Active Consumer property.
+    // This setting will cause only one active consumer to receive data from this queue.
+
     private static final Logger logger = LoggerFactory.getLogger(SingleActiveConsumer.class);
 
     @RabbitListener(queues = "q.single", concurrency = "5")

@@ -4,10 +4,7 @@ import com.example.rabbitmq.two.model.DummyMessage;
 import com.example.rabbitmq.two.model.InvoiceCancelledMessage;
 import com.example.rabbitmq.two.model.InvoiceCreatedMessage;
 import com.example.rabbitmq.two.model.InvoicePaidMessage;
-import com.example.rabbitmq.two.producer.DummyProducer;
-import com.example.rabbitmq.two.producer.InvoiceProducer;
-import com.example.rabbitmq.two.producer.MultiplePrefetchProducer;
-import com.example.rabbitmq.two.producer.SingleActiveProducer;
+import com.example.rabbitmq.two.producer.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,6 +26,7 @@ public class Application implements CommandLineRunner {
 	private final MultiplePrefetchProducer multiplePrefetchProducer;
 	private final InvoiceProducer invoiceProducer;
 	private final SingleActiveProducer singleActiveProducer;
+	private final ReliableProducer reliableProducer;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -70,7 +68,19 @@ public class Application implements CommandLineRunner {
 //			invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
 //		}
 
-		singleActiveProducer.sendDummy();
+//		singleActiveProducer.sendDummy();
+
+		DummyMessage dummyMessage = new DummyMessage("Dummy content", 1);
+
+		System.out.println("--------------------------------------------------------------------");
+		System.out.println("Calling sendDummyWithInvalidRoutingKey()");
+		reliableProducer.sendDummyWithInvalidRoutingKey(dummyMessage);
+
+		TimeUnit.SECONDS.sleep(3);
+
+		System.out.println("--------------------------------------------------------------------");
+		System.out.println("Calling sendDummyToInvalidExchange()");
+		reliableProducer.sendDummyToInvalidExchange(dummyMessage);
 
 	}
 

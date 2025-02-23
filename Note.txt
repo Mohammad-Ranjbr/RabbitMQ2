@@ -136,4 +136,38 @@ For example:
 🔹 queue.invoice.2 → number 5
 ✅ That is, queue.invoice.1 receives twice as many messages as queue.invoice.2.
 
+What is the problem?
+When we send a message, it may not be queued for various reasons:
+The Exchange is wrong (does not exist).
+The Routing Key is wrong (no queue is connected to it).
+The message is not sent to a queue (for example, no queue is connected in Fanout Exchange).
+What is the solution?
+RabbitMQ has a mechanism called Publisher Confirms that tells us asynchronously (Async Callback) whether the message was sent correctly or an error occurred.
+
+Implementation steps
+Enable send confirmation in application.yaml
+Enable Publisher Confirms so that we know whether the message was actually sent or not.
+Enable Publisher Returns so that we can check if the Routing Key is wrong.
+
+publisher-confirm-type: correlated
+Enables confirmation of sending messages to Exchange.
+This option checks whether the message has been sent to Exchange or not.
+The correlated value allows us to track each message with CorrelationData.
+publisher-returns: true
+Checks whether the message has reached the Queue or not.
+If an Exchange is found, but no queue is connected to it, the message is returned.
+template.mandatory: true
+Forces RabbitMQ to return messages that are not in any queue.
+When this value is true, RabbitMQ will return invalid messages to the producer instead of dropping them.
+This property works in conjunction with publisher-returns.
+
+📌 What is CorrelationData in RabbitMQ?
+CorrelationData is a class in Spring AMQP that is used to track RabbitMQ confirmations at the message level. This class does not belong to RabbitMQ but is defined in Spring and is used to communicate with RabbitMQ.
+🔍 Why do we need CorrelationData?
+When sending a message to RabbitMQ, we may want to know:
+✅ Did the message reach the Exchange? (Publisher Confirms)
+✅ Did the message reach the Queue? (Publisher Returns)
+✅ If there was a problem, which message had the problem?
+For this, we use CorrelationData. This class creates a unique identifier (ID) for each message, so that we can associate the RabbitMQ response to a specific message.
+
 
