@@ -1,14 +1,20 @@
 package com.example.rabbitmq.two.consumer;
 
+import com.example.rabbitmq.two.model.InvoiceCancelledMessage;
 import com.example.rabbitmq.two.model.InvoiceCreatedMessage;
 import com.example.rabbitmq.two.model.InvoicePaidMessage;
+import com.example.rabbitmq.two.model.PaymentCancelStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
-//@Service
+import java.time.LocalDate;
+import java.util.concurrent.ThreadLocalRandom;
+
+@Service
 @RabbitListener(queues = "q.invoice")
 public class InvoiceConsumer {
 
@@ -38,6 +44,17 @@ public class InvoiceConsumer {
     @RabbitHandler(isDefault = true)
     public void handleDefault(Object message){
         logger.warn("Received Unknown Message : {}", message);
+    }
+
+    // Each consumer can be a producer itself
+    // The queue.invoice consumer sends the result to queue.invoice.cancel after processing
+    // The queue.invoice.cancel queue stores this message for other consumers to process
+
+    @RabbitHandler
+    @SendTo("x.invoice.cancel/")
+    public PaymentCancelStatus handleInvoiceCancelled(InvoiceCancelledMessage invoiceCancelledMessage){
+        var randomStatus = ThreadLocalRandom.current().nextBoolean();
+        return new PaymentCancelStatus(randomStatus, LocalDate.now(), invoiceCancelledMessage.getInvoiceNumber());
     }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
-@Service
+//@Service
 public class SingleActiveConsumer {
 
     // What is the general idea?

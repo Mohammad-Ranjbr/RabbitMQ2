@@ -170,4 +170,20 @@ When sending a message to RabbitMQ, we may want to know:
 ✅ If there was a problem, which message had the problem?
 For this, we use CorrelationData. This class creates a unique identifier (ID) for each message, so that we can associate the RabbitMQ response to a specific message.
 
+📌 What is Request-Reply in RabbitMQ?
+✅ In this lesson, we will learn how to process a message and send a reply.
+✅ The message reaches a consumer and after processing, it publishes the reply to a new queue.
+✅ This method is very useful in microservice architecture, because it keeps the systems independent from each other.
+
+📌 Scenario: Invoice Cancellation
+1️⃣ A message is sent to RabbitMQ to cancel an invoice.
+2️⃣ The consumer receives the message from queue.invoice.
+3️⃣ If the invoice cancellation is successful ➝ A journal entry is created.
+4️⃣ If the invoice cancellation is unsuccessful ➝ A warning email is sent to the finance manager.
+5️⃣ The message is sent to a new queue to prevent problems if the accounting service is unavailable.
+
+📌 Possible problem and solution
+❌ If the accounting service is not available at the moment the consumer processes the message, the financial information will not be recorded.
+✅ Solution: Send the message to another queue (queue.invoice.cancel) for another consumer to process it.
+
 

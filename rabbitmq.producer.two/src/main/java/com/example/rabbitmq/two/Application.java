@@ -70,17 +70,23 @@ public class Application implements CommandLineRunner {
 
 //		singleActiveProducer.sendDummy();
 
-		DummyMessage dummyMessage = new DummyMessage("Dummy content", 1);
+//		DummyMessage dummyMessage = new DummyMessage("Dummy content", 1);
+//
+//		System.out.println("--------------------------------------------------------------------");
+//		System.out.println("Calling sendDummyWithInvalidRoutingKey()");
+//		reliableProducer.sendDummyWithInvalidRoutingKey(dummyMessage);
+//
+//		TimeUnit.SECONDS.sleep(3);
+//
+//		System.out.println("--------------------------------------------------------------------");
+//		System.out.println("Calling sendDummyToInvalidExchange()");
+//		reliableProducer.sendDummyToInvalidExchange(dummyMessage);
 
-		System.out.println("--------------------------------------------------------------------");
-		System.out.println("Calling sendDummyWithInvalidRoutingKey()");
-		reliableProducer.sendDummyWithInvalidRoutingKey(dummyMessage);
-
-		TimeUnit.SECONDS.sleep(3);
-
-		System.out.println("--------------------------------------------------------------------");
-		System.out.println("Calling sendDummyToInvalidExchange()");
-		reliableProducer.sendDummyToInvalidExchange(dummyMessage);
+		for(int i=0 ; i<10 ; i++){
+			String invoiceNumber = "INV-" + i;
+			InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice cancelled " + i, invoiceNumber, LocalDate.now());
+			invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+		}
 
 	}
 

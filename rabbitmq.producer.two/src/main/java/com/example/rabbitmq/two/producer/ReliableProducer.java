@@ -31,7 +31,7 @@ public class ReliableProducer {
     // Initialize some values.
     // Perform operations that need to be performed once at the beginning of the application execution.
 
-    @PostConstruct
+    //@PostConstruct
     private void registerCallback(){
         // Checks whether the message arrived at the valid Exchange or not.
         rabbitTemplate.setConfirmCallback(((correlationData, ack, reason) -> {
