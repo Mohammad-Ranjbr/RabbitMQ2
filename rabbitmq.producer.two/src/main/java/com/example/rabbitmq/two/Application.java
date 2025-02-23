@@ -49,18 +49,24 @@ public class Application implements CommandLineRunner {
 //		multiplePrefetchProducer.simulateTransaction();
 //		multiplePrefetchProducer.simulateScheduler();
 
-		String randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
-		InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
-		invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+//		String randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
+//		InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
+//		invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+//
+//		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
+//		String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
+//		InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
+//		invoiceProducer.sendInvoicePaid(invoicePaidMessage);
+//
+//		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
+//		InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
+//		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 
-		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
-		String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
-		InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
-		invoiceProducer.sendInvoicePaid(invoicePaidMessage);
-
-		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
-		InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
-		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+		for(int i=0 ; i<200 ; i++){
+			String invoiceNumber = "INV-" + (i % 60);
+			InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(ThreadLocalRandom.current().nextInt(1, 200), LocalDate.now(), "USD", invoiceNumber);
+			invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+		}
 
 	}
 

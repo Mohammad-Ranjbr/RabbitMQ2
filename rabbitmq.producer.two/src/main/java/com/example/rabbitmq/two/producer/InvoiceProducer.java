@@ -18,16 +18,21 @@ public class InvoiceProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    // Now we modify InvoiceProducer to send messages with the invoice number as the Routing Key.
+    // Consistent Hash Exchange ensures that all messages related to an invoice go to the same queue.
+    // RabbitMQ uses mathematical approximations and internal algorithms for distribution when distributing messages,
+    // so there may be slight differences, but the overall trend is as expected.
+
     public void sendInvoiceCreated(InvoiceCreatedMessage invoiceCreatedMessage){
-        rabbitTemplate.convertAndSend(EXCHANGE, "", invoiceCreatedMessage);
+        rabbitTemplate.convertAndSend(EXCHANGE, invoiceCreatedMessage.getInvoiceNumber(), invoiceCreatedMessage);
     }
 
     public void sendInvoicePaid(InvoicePaidMessage invoicePaidMessage){
-        rabbitTemplate.convertAndSend(EXCHANGE, "", invoicePaidMessage);
+        rabbitTemplate.convertAndSend(EXCHANGE, invoicePaidMessage.getInvoiceNumber(), invoicePaidMessage);
     }
 
     public void sendInvoiceCancelled(InvoiceCancelledMessage invoiceCancelledMessage){
-        rabbitTemplate.convertAndSend(EXCHANGE, "", invoiceCancelledMessage);
+        rabbitTemplate.convertAndSend(EXCHANGE, invoiceCancelledMessage.getInvoiceNumber(), invoiceCancelledMessage);
     }
 
 }

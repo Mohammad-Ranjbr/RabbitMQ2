@@ -107,3 +107,33 @@ We put the same previous messages (Invoice Paid and Invoice Created) in a common
 ❌ Disadvantages:
 🔸 Consumers need to check what type the message is, which makes coding a bit more complicated.
 🔸 In languages other than Java/Spring, message type conversion may be harder.
+
+Ensuring Message Order in RabbitMQ with Consistent Hash Exchange
+If we have multiple consumers, messages may be processed out of order, causing the final data state to be incorrect. To solve this problem and maintain the order of messages while using multiple consumers, we use Consistent Hash Exchange
+
+❌ Problem with simultaneous message consumption
+Suppose we have two messages with information about an invoice (Invoice Y):
+First message: Invoice paid
+Second message: New invoice created
+If consumer 1 is faster and processes the first message, the invoice status is saved as "paid".
+But if consumer 2 is slower and processes the second message later, the invoice status is returned to "new"!
+✅ Result? The final data is incorrect!
+
+✔ Solution: Use Consistent Hash Exchange
+With Consistent Hash Exchange, we route messages to the same specified queue based on a unique identifier (e.g. invoiceNumber).
+🔹 Messages related to Invoice X → always go to queue.invoice.1
+🔹 Messages related to Invoice Y → always go to queue.invoice.2
+✅ Now each invoice is always processed by a consumer and the order of messages is preserved!
+
+📌 Implementation Steps
+1. Enable the Consistent Hash Exchange plugin
+rabbitmq-plugins list # Show RabbitMQ plugins
+rabbitmq-plugins enable rabbitmq_consistent_hash_exchange
+
+The main difference of Consistent Hash Exchange is that at the time of Binding we must specify a number as Routing Key which determines the ratio of message distribution.
+For example:
+🔹 queue.invoice.1 → number 10
+🔹 queue.invoice.2 → number 5
+✅ That is, queue.invoice.1 receives twice as many messages as queue.invoice.2.
+
+
