@@ -21,7 +21,7 @@ public class AnotherDummyConsumer {
             value = @Queue(name = "q.invoice", durable = "true"),
             exchange = @Exchange(name = "x.invoice", type = ExchangeTypes.FANOUT, durable = "true"),
             //key = "routing-key",
-            ignoreDeclarationExceptions = "false"
+            ignoreDeclarationExceptions = "true"
     ))
     public void listenDummy(DummyMessage dummyMessage){
         logger.info("Dummy Message : {}", dummyMessage);

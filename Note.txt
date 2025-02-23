@@ -186,4 +186,42 @@ For this, we use CorrelationData. This class creates a unique identifier (ID) fo
 ❌ If the accounting service is not available at the moment the consumer processes the message, the financial information will not be recorded.
 ✅ Solution: Send the message to another queue (queue.invoice.cancel) for another consumer to process it.
 
+📌 Difference between Apache Kafka and RabbitMQ
 
+✅ How messages are stored
+In Kafka, messages are stored on disk and persist for a certain period of time (e.g. 7 days), even if they have been consumed.
+In RabbitMQ, messages are kept only until a consumer acknowledges them. After processing, they are deleted.
+
+✅ Queue management and message delivery
+In Kafka, the producer determines in which topic and partition the message should be stored.
+In RabbitMQ, the producer sends the message to the Exchange, which decides which queue to send the message to using the routing key.
+
+✅ Message processing model
+📌 Kafka → Pull model:
+🔹 The consumer receives (pulls) messages.
+🔹 This method ensures that the order of messages in a partition is maintained.
+
+📌 RabbitMQ → Push model:
+🔹 Messages are sent to the consumer (Pushed).
+🔹 If the producer is faster than the consumer, RabbitMQ uses Prefetch Limit so that the consumer does not have too much load.
+
+✅ Which one to choose?
+Kafka is suitable for processing large amounts of data and streaming.
+Banks, e-commerce companies and logging systems use Kafka.
+RabbitMQ is suitable for real-time messaging systems and work distribution.
+Messengers, notification systems and background job processing management use RabbitMQ.
+If you need a simple and fast system for messaging.
+
+⚡ Key Differences
+Features of Kafka RabbitMQ
+How messages are maintained
+Kafka: Messages are stored on disk and persist for a certain period of time. RabbitMQ: Messages are stored in memory or disk, but are deleted after being received by the consumer.
+Message delivery mechanism
+Pull → Consumer pulls messages from Kafka.
+Push → RabbitMQ sends messages to the consumer.
+Message management
+Kafka: Messages are organized by Topic and Partition.
+RabbitMQ: Messages are managed by Exchange and sent to Queues.
+Message order guarantee
+Kafka: In a Partition, the order of messages is guaranteed.
+RabbitMQ: In a Queue, the processing order may change (due to the Competing Consumers model).
