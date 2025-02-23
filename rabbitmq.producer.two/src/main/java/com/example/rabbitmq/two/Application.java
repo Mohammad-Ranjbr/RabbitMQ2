@@ -18,23 +18,23 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class Application implements CommandLineRunner {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 
-	private final DummyProducer dummyProducer;
-	private final MultiplePrefetchProducer multiplePrefetchProducer;
-	private final InvoiceProducer invoiceProducer;
-	private final SingleActiveProducer singleActiveProducer;
-	private final ReliableProducer reliableProducer;
+    private final DummyProducer dummyProducer;
+    private final MultiplePrefetchProducer multiplePrefetchProducer;
+    private final InvoiceProducer invoiceProducer;
+    private final SingleActiveProducer singleActiveProducer;
+    private final ReliableProducer reliableProducer;
 
-	@Override
-	public void run(String... args) throws Exception {
+    @Override
+    public void run(String... args) throws Exception {
 //		DummyMessage dummyMessage = new DummyMessage("Content", 1);
 //		dummyProducer.sendMessage(dummyMessage);
 
-		// The number 10_000 is the same as ten thousand (10,000), but written with an underscore (_).
-		// The underscore (_) has no effect on the value of the number and is only used for readability.
+        // The number 10_000 is the same as ten thousand (10,000), but written with an underscore (_).
+        // The underscore (_) has no effect on the value of the number and is only used for readability.
 //		for(int i=0 ; i<10_000 ; i++){
 //			DummyMessage dummyMessage = new DummyMessage("Content " + i, 1);
 //			dummyProducer.sendMessage(dummyMessage);
@@ -49,18 +49,18 @@ public class Application implements CommandLineRunner {
 //		multiplePrefetchProducer.simulateTransaction();
 //		multiplePrefetchProducer.simulateScheduler();
 
-//		String randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
-//		InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
-//		invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
-//
-//		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
-//		String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
-//		InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
-//		invoiceProducer.sendInvoicePaid(invoicePaidMessage);
-//
-//		randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
-//		InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
-//		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+        String randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
+        InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
+        invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+
+        randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
+        String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
+        InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
+        invoiceProducer.sendInvoicePaid(invoicePaidMessage);
+
+        randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
+        InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
+        invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 
 //		for(int i=0 ; i<200 ; i++){
 //			String invoiceNumber = "INV-" + (i % 60);
@@ -82,12 +82,12 @@ public class Application implements CommandLineRunner {
 //		System.out.println("Calling sendDummyToInvalidExchange()");
 //		reliableProducer.sendDummyToInvalidExchange(dummyMessage);
 
-		for(int i=0 ; i<10 ; i++){
-			String invoiceNumber = "INV-" + i;
-			InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice cancelled " + i, invoiceNumber, LocalDate.now());
-			invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
-		}
+//		for(int i=0 ; i<10 ; i++){
+//			String invoiceNumber = "INV-" + i;
+//			InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice cancelled " + i, invoiceNumber, LocalDate.now());
+//			invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+//		}
 
-	}
+    }
 
 }

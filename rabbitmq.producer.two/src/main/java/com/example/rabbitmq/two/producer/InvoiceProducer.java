@@ -14,7 +14,7 @@ public class InvoiceProducer {
     private static final String EXCHANGE = "x.invoice";
 
     @Autowired
-    public InvoiceProducer(RabbitTemplate rabbitTemplate){
+    public InvoiceProducer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
@@ -23,15 +23,15 @@ public class InvoiceProducer {
     // RabbitMQ uses mathematical approximations and internal algorithms for distribution when distributing messages,
     // so there may be slight differences, but the overall trend is as expected.
 
-    public void sendInvoiceCreated(InvoiceCreatedMessage invoiceCreatedMessage){
+    public void sendInvoiceCreated(InvoiceCreatedMessage invoiceCreatedMessage) {
         rabbitTemplate.convertAndSend(EXCHANGE, invoiceCreatedMessage.getInvoiceNumber(), invoiceCreatedMessage);
     }
 
-    public void sendInvoicePaid(InvoicePaidMessage invoicePaidMessage){
+    public void sendInvoicePaid(InvoicePaidMessage invoicePaidMessage) {
         rabbitTemplate.convertAndSend(EXCHANGE, invoicePaidMessage.getInvoiceNumber(), invoicePaidMessage);
     }
 
-    public void sendInvoiceCancelled(InvoiceCancelledMessage invoiceCancelledMessage){
+    public void sendInvoiceCancelled(InvoiceCancelledMessage invoiceCancelledMessage) {
         rabbitTemplate.convertAndSend(EXCHANGE, invoiceCancelledMessage.getInvoiceNumber(), invoiceCancelledMessage);
     }
 
