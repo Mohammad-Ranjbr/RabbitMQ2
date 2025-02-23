@@ -18,7 +18,7 @@ public class RabbitmqSchemaConfig {
     //The queue will be automatically deleted if that connection is closed.
     //@Bean
     public Queue queue() {
-        return new Queue("q.invoice");
+        return new Queue("q.invoice", true, false, false);
     }
 
     //@Bean

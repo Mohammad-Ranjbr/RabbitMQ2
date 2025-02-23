@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Service
+//@Service
 @RabbitListener(queues = "q.invoice")
 public class InvoiceConsumer {
 
