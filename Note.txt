@@ -225,3 +225,65 @@ RabbitMQ: Messages are managed by Exchange and sent to Queues.
 Message order guarantee
 Kafka: In a Partition, the order of messages is guaranteed.
 RabbitMQ: In a Queue, the processing order may change (due to the Competing Consumers model).
+
+General Comparison Between Queue and Stream in RabbitMQ
+Queue Stream
+How to Store Messages
+Queue: The message is deleted after consumption.
+Stream: The message remains after consumption.
+Consumers
+Queue: Each message is processed by only one consumer.
+Stream: Each message can be processed by multiple consumers.
+Access to Messages
+Queue: Messages are read only once.
+Stream: Messages can be read multiple times.
+Performance in Large Message Volume
+Queue: If the messages become too large, the performance decreases.
+Stream: It is optimized for large message volume and has better performance.
+Message Replay Capability
+Queue: There is no possibility to reread previous messages.
+Stream: The consumer can start reading from anywhere in the Stream.
+Managing the number of consumers
+Queue: To send a message to multiple consumers, we need a Fan-out Exchange and multiple Queues.
+Stream: Multiple consumers can read a Stream directly.
+Queue: Does not require plugin activation.
+Stream: Requires Stream plugin activation.
+
+How Queue works in RabbitMQ
+In the traditional Queue model:
+A message is sent.
+A consumer receives the message and processes it.
+After processing, the message is removed from the Queue.
+If the message is sent to multiple consumers, a separate Queue must be created for each consumer.
+Problem: If 100 consumers want to read a message, we need to create 100 separate Queues, which is difficult to manage.
+
+How Streams work in RabbitMQ
+In the Stream model:
+A message is sent and added to the end of the Stream.
+Multiple consumers can read the same message at the same time.
+Messages remain in the Stream and are only deleted when the time limit (Time To Live) is reached.
+No need to create multiple Queues.
+Advantage: If 100 consumers want to read a message, they can all use one Stream and no need for 100 Queues
+
+🔹 Queue Example
+We send 3 green messages (Green1, Green2, Green3) to the Queue.
+Two consumers (Q1 and Q2) start working.
+Q1 consumes Green1 and Green2 messages.
+Q2 consumes Green3 message.
+Now the Queue is empty and no new consumers can receive these messages.
+📌 Result: Messages are processed only once and are deleted after processing.
+
+🔹 Stream Example
+We send 3 yellow messages (Yellow1, Yellow2, Yellow3) to the Stream.
+Two consumers (S1 and S2) start working.
+S1 reads the messages Yellow1, Yellow2, and Yellow3.
+S2 also reads the messages Yellow1, Yellow2, and Yellow3.
+The messages still remain in the Stream and new consumers can process these messages.
+📌 Result: The messages are not deleted and multiple consumers can use the same message.
+
+🔹 RabbitMQ Queue is designed to unload messages quickly, but performance degrades if the number of messages increases.
+🔹 Stream is designed to process large amounts of data and has better performance.
+
+Enabling RabbitMQ Stream
+
+
