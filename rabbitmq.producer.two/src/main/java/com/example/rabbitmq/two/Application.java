@@ -27,6 +27,7 @@ public class Application implements CommandLineRunner {
     private final InvoiceProducer invoiceProducer;
     private final SingleActiveProducer singleActiveProducer;
     private final ReliableProducer reliableProducer;
+    private final StreamHelloProducer streamHelloProducer;
 
     @Override
     public void run(String... args) throws Exception {
@@ -49,18 +50,18 @@ public class Application implements CommandLineRunner {
 //		multiplePrefetchProducer.simulateTransaction();
 //		multiplePrefetchProducer.simulateScheduler();
 
-        String randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
-        InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
-        invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
-
-        randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
-        String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
-        InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
-        invoiceProducer.sendInvoicePaid(invoicePaidMessage);
-
-        randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
-        InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
-        invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+//        String randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(100, 200);
+//        InvoiceCreatedMessage invoiceCreatedMessage = new InvoiceCreatedMessage(155.75, LocalDate.now(), "USD", randomInvoiceNumber);
+//        invoiceProducer.sendInvoiceCreated(invoiceCreatedMessage);
+//
+//        randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(200, 300);
+//        String randomPaymentNumber = "PAY-" + ThreadLocalRandom.current().nextInt(1000, 2000);
+//        InvoicePaidMessage invoicePaidMessage = new InvoicePaidMessage(randomInvoiceNumber, LocalDate.now(), randomPaymentNumber);
+//        invoiceProducer.sendInvoicePaid(invoicePaidMessage);
+//
+//        randomInvoiceNumber = "INV-" + ThreadLocalRandom.current().nextInt(300, 400);
+//        InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice Cancelled", randomInvoiceNumber, LocalDate.now());
+//        invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 
 //		for(int i=0 ; i<200 ; i++){
 //			String invoiceNumber = "INV-" + (i % 60);
@@ -87,6 +88,14 @@ public class Application implements CommandLineRunner {
 //			InvoiceCancelledMessage invoiceCancelledMessage = new InvoiceCancelledMessage("Invoice cancelled " + i, invoiceNumber, LocalDate.now());
 //			invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 //		}
+
+        streamHelloProducer.sendHello("Hello 1");
+        streamHelloProducer.sendHello("Hello 2");
+        streamHelloProducer.sendHello("Hello 3");
+
+        streamHelloProducer.sendHelloUsingExchange("Hello 1");
+        streamHelloProducer.sendHelloUsingExchange("Hello 2");
+        streamHelloProducer.sendHelloUsingExchange("Hello 3");
 
     }
 

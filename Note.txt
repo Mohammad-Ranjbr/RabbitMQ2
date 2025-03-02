@@ -285,5 +285,7 @@ The messages still remain in the Stream and new consumers can process these mess
 🔹 Stream is designed to process large amounts of data and has better performance.
 
 Enabling RabbitMQ Stream
-
+        - docker exec -it rabbitmq bash
+        - rabbitmq-plugins enable rabbitmq_stream
+        - docker restart rabbitmq
 

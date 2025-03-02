@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnotherDummyConsumer {
 
-    private static final Logger logger = LoggerFactory.getLogger(DummyConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(AnotherDummyConsumer.class);
 
     // Instead of defining Queue and Exchange in a Configuration class (like we did in the Producer), we can do this directly inside the Listener (message consumer).
 
