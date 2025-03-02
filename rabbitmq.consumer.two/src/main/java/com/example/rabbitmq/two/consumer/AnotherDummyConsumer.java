@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class AnotherDummyConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(AnotherDummyConsumer.class);
